@@ -32,13 +32,13 @@ No external Python packages are required.
 **1. Clone the repository**
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/shubhammaharana243/Datheon_Python_Programming_Internship.git
 ```
 
 **2. Navigate to the project folder**
 
 ```bash
-cd <your-project-folder>
+cd Task1
 ```
 
 **3. Run the game**
