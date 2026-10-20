@@ -61,37 +61,16 @@ def hangman(value):
     ]
 
     print(hangman_art[value])
-def random_cate_word():
-    word_dict = {
-        "ANIMAL":["CAT", "DOG", "HORSE", "LION", "TIGER", "ELEPHANT", "GIRAFFE", "ZEBRA","BEAR", "DONKEY", "MONKEY", "KANGAROO", "DOLPHIN"],
 
-        "SPACE": ["MOON", "STAR", "SUN", "ROCKET", "ALIEN", "SPACE", "ASTRONOMY", "SUPERNOVA", "GRAVITY", "NEBULA"],
+def data_in_word_file():
+    data = []
+    with open("Task1/google-10000-english-no-swears.txt", "r") as f:
+        data= f.read().splitlines()
 
-        "FRUIT":["APPLE", "BANANA", "MANGO", "GUAVA", "GRAPES", "PINEAPPLE", "PAPAYA", "WATERMELON"],
-
-        "BODY PART": ["HAND", "FOOT", "HEAD", "NOSE", "EYES", "HAIR", "NECK", "LIVER", "KIDNEY", "SKELETON", "BONE", "FACE", "EARS", "MOUTH"],
-
-        "FOOD": ["BURGER", "PIZZA", "SUSHI", "SANDWICH", "CHOCOLATE", "PASTA", "TACOS", "BIRYANI", "SAMOSA", "DOSA"],
-
-        "PROGRAMMING": ["CODE", "LOOP", "BUG", "DATA", "FILE", "VARIABLE", "STRING", "ARRAY", "CLASS", "OBJECT", "INPUT", "OUTPUT", "DICTIONARY", "INHERITANCE", "COMPILER", "POLYMORPHISM", "ENCAPSULATION"],
-
-        "SPORTS": ["FOOTBALL", "CRICKET", "HOCKEY", "TENNIS", "BOXING", "CHESS", "GOLF", "BADMINTON", "MARATHON", "BALL", "REFEREE", "BAT"],
-
-        "TECHNOLOGY": ["ALGORITHM", "CYBERSECURITY", "BLOCKCHAIN", "SATELLITE", "AI", "PROCESSOR", "MICROCHIP", "RAM"],
-    }
-
-    categories= list(word_dict.keys())
-
-    ran_category = random.choice(categories)
-    ran_word = random.choice(word_dict[ran_category])
-
-    return [ran_category, ran_word]
+    return data
 
 def main():
-    random_pair = random_cate_word()
-
-    random_category= random_pair[ 0]
-    random_word = random_pair[1]
+    random_word = random.choice(data_in_word_file())
 
     wrong_guesses = 0
     max_tries = 6
@@ -100,7 +79,6 @@ def main():
 
     print("\n====== Welcome to Hangman! ======")
     print("-"*33)
-    print(f"\nHint: The word belongs to this category: {random_category}")
 
 
     while max_tries > wrong_guesses:
@@ -122,7 +100,7 @@ def main():
             break
         print("\nPlease enter a single letter!\n")
 
-        guess = input("Guess a latter: ").strip().upper()
+        guess = input("Guess a latter: ").strip().lower()
 
         if len(guess)!= 1 or not guess.isalpha():
             print("You already guessed that letter.")
@@ -139,7 +117,6 @@ def main():
         else:
             wrong_guesses+=1
             print("\nWrong guess")
-            print(f"Hint: The word belongs to this category: {random_category}")
 
     else:
         hangman(wrong_guesses)
