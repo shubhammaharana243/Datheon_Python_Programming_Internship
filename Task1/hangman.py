@@ -96,7 +96,7 @@ def main():
     wrong_guesses = 0
     max_tries = 6
 
-    guessed = []
+    guessed = set()
 
     print("\n====== Welcome to Hangman! ======")
     print("-"*33)
@@ -132,7 +132,7 @@ def main():
             print("You already guessed that latter.")
             continue
 
-        guessed.append(guess)
+        guessed.add(guess)
 
         if guess in random_word:
             print("\nCorrect guess!")
