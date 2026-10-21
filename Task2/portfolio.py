@@ -35,7 +35,7 @@ def ticker_valid_or_not(user_stocks):
         y_or_n = input("Do you want to continue without that invalid ticker? (yes/no) ").lower()
 
         if y_or_n == "yes" or y_or_n =="y":
-            
+
             invalid_stock = []
 
             for i in pass_or_not_list:
@@ -47,6 +47,7 @@ def ticker_valid_or_not(user_stocks):
                     user_stocks.remove(stock)
 
             fatch_data_from_yf(user_stocks)
+
         else:
             print("\nEnter valid informations\n")
             main()
@@ -73,5 +74,8 @@ def main():
         user_stocks.append({"stock_ticker": ticker, "buy_price": price, "share_quantity": share})
 
         i+=1
+
+    ticker_valid_or_not(user_stocks)
     
-ticker_valid_or_not()
+if __name__ == "__main__":
+    main()
