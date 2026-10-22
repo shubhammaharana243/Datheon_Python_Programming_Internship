@@ -83,8 +83,19 @@ def fatch_data_from_yf_and_computes(user_stocks):
         current_stock_data.append(data)
 
 def write_csv(stock_data):
-    pass
-           
+    with open(write_csv_file, "w", newline="") as file:
+        writer = csv.DictWriter(
+            file, 
+            fieldnames=["Ticker", "Buy Price", "Quantity", "Current Price", "Invested Capital", "Market Value", "Profit/Loss", "Gain/Loss %"]
+        )
+
+        writer.writeheader()
+
+        for data in stock_data:
+            writer.writerows(data["ticker"], data["buy_price"], data["quantity"], data["current_price"], data["market_value"], data["profit_or_loss"], data["gain_or_loss"])
+            
+    print(f"{write_csv_file} file created!")
+
 def main():
     user_stocks = []
 
