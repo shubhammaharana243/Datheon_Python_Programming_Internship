@@ -1,8 +1,8 @@
 import csv
 import yfinance as yf
 
-csv_file = "Task2/constituents.csv"
-write_csv_file = "Task2/portfolio_summary.csv"
+csv_file = "constituents.csv"
+write_csv_file = "portfolio_summary.csv"
 
 def ticker_valid_or_not(user_stocks):
     tickers_in_file = []
@@ -159,4 +159,5 @@ def main():
     ticker_valid_or_not(user_stocks)
     
 if __name__ == "__main__":
+    print("\n== Welcome to the Stock Portfolio Tracker ==\n")
     main()
