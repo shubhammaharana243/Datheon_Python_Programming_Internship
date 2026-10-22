@@ -1,7 +1,8 @@
 import csv
-# import yfinance as yf
+import yfinance as yf
 
 csv_file = "Task2/constituents.csv"
+write_csv_file = "Task2/portfolio_summary.csv"
 
 def ticker_valid_or_not(user_stocks):
     tickers_in_file = []
@@ -46,18 +47,44 @@ def ticker_valid_or_not(user_stocks):
                 if stock["stock_ticker"] in invalid_stock:
                     user_stocks.remove(stock)
 
-            fatch_data_from_yf(user_stocks)
+            fatch_data_from_yf_and_computes(user_stocks)
 
         else:
             print("\nEnter valid informations\n")
             main()
 
-def fatch_data_from_yf():
-    pass
+def fatch_data_from_yf_and_computes(user_stocks):
+    current_stock_data = []
+    
+    for stock in user_stocks:
+        stock_data= yf.Ticker(stock["stock_ticker"])
 
-def computes():
-    pass
+        current_price = stock_data.fast_info["lastPrice"]
+        invested_capital = stock_data["buy_price"] * stock["share_quantity"]
+        market_value = current_price * stock["share_quantity"]
+        profit_or_loss = market_value - invested_capital
 
+        if profit_or_loss>0:
+            gain_or_loss = (profit_or_loss/ invested_capital)*100
+        elif profit_or_loss<0:
+            gain_or_loss = (abs(profit_or_loss)/invested_capital)*100
+        else:
+            gain_or_loss = 0
+
+        data = {
+            "ticker": stock["stock_ticker"],
+            "buy_price": stock["buy_price"],
+            "quantity": stock["share_quantity"],
+            "current_price": invested_capital,
+            "market_value": market_value,
+            "profit_or_loss": profit_or_loss,
+            "gain_or_loss": gain_or_loss,
+        }
+        current_stock_data.append(data)
+
+def write_csv(stock_data):
+    pass
+           
 def main():
     user_stocks = []
 
