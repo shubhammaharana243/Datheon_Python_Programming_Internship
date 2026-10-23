@@ -1,8 +1,10 @@
 import csv
 import yfinance as yf
+
 # Define input and output CSV file paths
 csv_file = "constituents.csv"
 write_csv_file = "portfolio_summary.csv"
+
 # Check whether the stock ticker CSV file exists
 def file_exist_or_not():
     try:
@@ -13,6 +15,7 @@ def file_exist_or_not():
         return False
         
     return True
+
 # Validate user-entered stock tickers against the CSV list
 def ticker_valid_or_not(user_stocks):
     # Store valid stock tickers from the CSV file

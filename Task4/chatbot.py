@@ -2,7 +2,7 @@
 import json, re
 
 # Define the path to the FAQ JSON file
-jsonfile = "Task4/sample_faq.json"
+jsonfile = "sample_faq.json"
 
 # Load FAQ data from the JSON file
 def loadjson():
