@@ -100,14 +100,14 @@ def main():
             break
         print("\nPlease enter a single letter!\n")
 
-        guess = input("Guess a latter: ").strip().lower()
+        guess = input("Guess a letter: ").strip().lower()
 
-        if len(guess)!= 1 or not guess.isalpha():
-            print("You already guessed that letter.")
+        if len(guess) != 1 or not guess.isalpha():
+            print("Invalid input! Please enter a single letter.")
             continue
 
         if guess in guessed:
-            print("You already guessed that latter.")
+            print("You already guessed that letter.")
             continue
 
         guessed.add(guess)
