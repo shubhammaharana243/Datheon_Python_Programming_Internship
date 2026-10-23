@@ -1,4 +1,4 @@
-
+# Import modules for file operations, logging, and path management
 import os
 import shutil
 import logging
@@ -12,6 +12,7 @@ logging.basicConfig(
 
 logger = logging.getLogger("file_organizer")
 
+# Define file extensions and their corresponding categories
 FILE_TYPES = {
     "Images": [
         ".jpg", ".jpeg", ".png", ".gif", ".webp",
@@ -43,7 +44,7 @@ FILE_TYPES = {
         ".exe", ".msi", ".appx", ".apk", ".deb", ".rpm"
     ]
 }
-
+# Classify files based on their extensions
 class FileClassifier:
     def __init__(self, file_types):
         self.file_types = {
@@ -66,6 +67,7 @@ class FileClassifier:
 
         return "Others"
 
+# Scan the selected folder and find files to organize
 def scan_files(folder):
     try:
         with os.scandir(folder) as entries:
@@ -81,7 +83,7 @@ def scan_files(folder):
     except OSError as exc:
         logger.error("Could not scan folder %s: %s", folder, exc)
 
-
+# Generate unique destination paths to prevent filename conflicts
 def unique_destination(destination, reserved=None):
     reserved = reserved if reserved is not None else set()
     candidate = destination
@@ -96,6 +98,7 @@ def unique_destination(destination, reserved=None):
     reserved.add(candidate)
     return candidate
 
+# Create an organization plan without moving any files
 def plan_organization(folder, classifier):
     reserved = set()
     plan = []
@@ -116,7 +119,7 @@ def plan_organization(folder, classifier):
         })
 
     return plan
-
+# Organize files into categories and record successful moves
 class FileOrganizer:
     def __init__(self, source_folder, classifier):
         self.source_folder = Path(source_folder)
@@ -165,7 +168,8 @@ class FileOrganizer:
                 )
 
         return self.history
-
+    
+# Preview file organization without moving any files
 class FileOrganizerDryRun:
     def __init__(self, source_folder, classifier):
         self.source_folder = Path(source_folder)
@@ -176,7 +180,7 @@ class FileOrganizerDryRun:
             self.source_folder, self.classifier
         )
 
-
+# Restore files to their original locations
 class FileUndo:
     def undo(self, history):
         restored = 0
@@ -222,7 +226,7 @@ class FileUndo:
 
         return restored, failed
 
-
+# Ask the user for a folder path and validate it
 def get_folder():
     raw_path = input(
         "\nEnter folder path to organize:\n> "
@@ -244,7 +248,7 @@ def get_folder():
         logger.error("Invalid folder: %s", exc)
         return None
 
-
+# Display a short processing animation
 def load_animation():
     print("Processing", end="", flush=True)
 
@@ -254,6 +258,7 @@ def load_animation():
 
     print()
 
+# Preview how files will be organized without making changes
 def dryrun(file_types):
     folder = get_folder()
     if folder is None:
@@ -265,6 +270,7 @@ def dryrun(file_types):
     print("\nDRY RUN — PREVIEW MODE")
     print("No files will be moved or modified.\n")
 
+    # Generate the organization preview
     plan = preview.organize_dryrun()
     load_animation()
 
@@ -286,18 +292,20 @@ def dryrun(file_types):
 
     input("\nPress Enter to return to menu...")
 
-
+# Organize files in the user-selected folder
 def organize_file(file_types):
     folder = get_folder()
     if folder is None:
         return None
 
+    # Initialize the classifier and file organizer
     classifier = FileClassifier(file_types)
     organizer = FileOrganizer(folder, classifier)
 
     print("\nStarting file organization...")
     load_animation()
 
+    # Execute the organization and collect the move history
     history = organizer.organize()
 
     categories = {
@@ -314,7 +322,7 @@ def organize_file(file_types):
 
     return history
 
-
+# Display the main menu and available operations
 def show_menu():
     print("\n" + "=" * 44)
     print("       SMART FILE ORGANIZER")
@@ -325,11 +333,12 @@ def show_menu():
     print("3. Undo Last Organization")
     print("4. Exit")
 
-
+# Display the main menu and available operations
 def main():
     history = []
     undo = FileUndo()
 
+    # Keep the application running until the user chooses to exit
     while True:
         show_menu()
         choice = input("\nEnter your choice (1-4): ").strip()
@@ -371,5 +380,7 @@ def main():
         else:
             print("Invalid choice. Please enter 1, 2, 3, or 4.")
 
+
+# Run the application when this script is executed directly
 if __name__ == "__main__":
     main()

@@ -1,9 +1,9 @@
 import csv
 import yfinance as yf
-
-csv_file = "Task2/constituents.csv"
+# Define input and output CSV file paths
+csv_file = "constituents.csv"
 write_csv_file = "portfolio_summary.csv"
-
+# Check whether the stock ticker CSV file exists
 def file_exist_or_not():
     try:
         with open(csv_file) as file:
@@ -13,20 +13,21 @@ def file_exist_or_not():
         return False
         
     return True
-
+# Validate user-entered stock tickers against the CSV list
 def ticker_valid_or_not(user_stocks):
+    # Store valid stock tickers from the CSV file
     tickers_in_file = []
-
+    # Store the validation result for each entered ticker
     pass_or_not_list = []
     pass_or_not =[]
 
-
+    # Read stock ticker symbols from the CSV file
     with open(csv_file, "r", newline="") as file:
         reader = csv.DictReader(file)
 
         for row in reader:
             tickers_in_file.append(row["Symbol"])
-
+    # Check whether each user-entered ticker exists in the CSV list
     for data in user_stocks:
         if data["stock_ticker"] in tickers_in_file:
             pass_or_not_list.append({"stock": data["stock_ticker"], "found": True})
@@ -36,17 +37,20 @@ def ticker_valid_or_not(user_stocks):
     for stock in pass_or_not_list:
         pass_or_not.append(stock["found"])
 
+    # Reject the input when the only entered ticker is invali
     if False in pass_or_not and len(pass_or_not) == 1:
         print("Invalid ticker.")
         print("\nPlease enter valid information.\n")
 
         return False
-
+    
+    # Ask whether to continue when some tickers are invalid
     elif False in pass_or_not:
 
         print("\nour ticker list contains an invalid ticker.")
         y_or_n = input("Do you want to continue without that invalid ticker? (yes/no) ").lower()
 
+        # Continue processing after removing invalid tickers
         if y_or_n == "yes" or y_or_n =="y":
 
             invalid_stock = []
@@ -70,7 +74,8 @@ def ticker_valid_or_not(user_stocks):
         print("\nCalculating...\n")
         fetch_stock_data_and_calculate(user_stocks)
         return True
-
+    
+# Retrieve stock information using Yahoo Finance and calculate portfolio performance
 def fetch_stock_data_and_calculate(user_stocks):
     current_stock_data = []
     
@@ -108,6 +113,7 @@ def fetch_stock_data_and_calculate(user_stocks):
 
     write_csv(current_stock_data)
 
+# Write portfolio performance results to a CSV file
 def write_csv(stock_data):
     with open(write_csv_file, "w", newline="") as file:
         writer = csv.DictWriter(
@@ -139,6 +145,7 @@ def write_csv(stock_data):
 
     print(f"{write_csv_file} File created successfully!")
 
+# Collect and validate portfolio details entered by the user
 def user_stock_data():
     user_stocks = []
 
@@ -175,18 +182,22 @@ def user_stock_data():
 
     return user_stocks
 
+# Coordinate file checking, user input, validation, and calculations
 def main():
     file_found = file_exist_or_not()
 
+    # Verify that the ticker CSV file is available before proceeding
     if file_found:
         user_stocks = user_stock_data()
 
+        # Validate tickers and repeat input collection if validation fails
         true_stock = ticker_valid_or_not(user_stocks)
 
         while not true_stock:
             user_stocks = user_stock_data()
             true_stock = ticker_valid_or_not(user_stocks)
 
+# Start the application when this script is executed directly
 if __name__ == "__main__":
     print("\n== Welcome to the Stock Portfolio Tracker ==\n")
     main()

@@ -1,5 +1,6 @@
 import random
-
+word_file = "Task1/google-l0000-english-no-swears.txt"
+# Display the Hangman drawing based on wrong guesses
 def hangman(value):
     hangman_art=[
 '''
@@ -62,67 +63,81 @@ def hangman(value):
 
     print(hangman_art[value])
 
+# Load the word list from the text file
 def data_in_word_file():
     data = []
-    with open("Task1/google-10000-english-no-swears.txt", "r") as f:
-        data= f.read().splitlines()
-
+    try:
+        with open(word_file, "r") as f:
+            data= f.read().splitlines()
+    except FileNotFoundError:
+        print("\ngoogle-l0000-english-no-swears.txt file does not exist\n")
+        return False
+    
     return data
 
+# main function
 def main():
-    random_word = random.choice(data_in_word_file())
+    word_list = data_in_word_file()
+    # execute remian code when file is found
+    if word_list:
+        # Randomly select a word from the word list
+        random_word = random.choice(word_list)
 
-    wrong_guesses = 0
-    max_tries = 6
+        wrong_guesses = 0
+        # Initialize the wrong guess counter and maximum attempts
+        max_tries = 6
 
-    guessed = set()
+        # Store letters that the player has already guessed
+        guessed = set()
 
-    print("\n====== Welcome to Hangman! ======")
-    print("-"*33)
+        print("\n====== Welcome to Hangman! ======")
+        print("-"*33)
 
+        # Continue the game until the player runs out of attempts
+        while max_tries > wrong_guesses:
 
-    while max_tries > wrong_guesses:
+            output = ""
+            for i in random_word:
+                if i in guessed:
+                    output += i + " "
+                else:
+                    output += "_ "
+            # Display the current Hangman stage
+            hangman(wrong_guesses)
 
-        output = ""
-        for i in random_word:
-            if i in guessed:
-                output += i + " "
+            print(f"Word: {output}")
+            # Check whether the player has guessed the entire word
+            if "_" not in output:
+                print("\nCongratulations! You won!")
+                print(f"The word was: {random_word}")
+                break
+            print("\nPlease enter a single letter!\n")
+
+            guess = input("Guess a letter: ").strip().lower()
+
+            # Validate the input to allow only one alphabetic character
+            if len(guess) != 1 or not guess.isalpha():
+                print("Invalid input! Please enter a single letter.")
+                continue
+
+            if guess in guessed:
+                print("You already guessed that letter.")
+                continue
+
+            guessed.add(guess)
+
+            # Check whether the guessed letter is present in the word
+            if guess in random_word:
+                print("\nCorrect guess!")
             else:
-                output += "_ "
+                wrong_guesses+=1
+                print("\nWrong guess")
 
-        hangman(wrong_guesses)
-
-        print(f"Word: {output}")
-
-        if "_" not in output:
-            print("\nCongratulations! You won!")
-            print(f"The word was: {random_word}")
-            break
-        print("\nPlease enter a single letter!\n")
-
-        guess = input("Guess a letter: ").strip().lower()
-
-        if len(guess) != 1 or not guess.isalpha():
-            print("Invalid input! Please enter a single letter.")
-            continue
-
-        if guess in guessed:
-            print("You already guessed that letter.")
-            continue
-
-        guessed.add(guess)
-
-        if guess in random_word:
-            print("\nCorrect guess!")
         else:
-            wrong_guesses+=1
-            print("\nWrong guess")
-
-    else:
-        hangman(wrong_guesses)
-        print("\nGame over")
-        print(f"The word was: {random_word}\n")
-
-
+            hangman(wrong_guesses)
+            print("\nGame over")
+            print(f"The word was: {random_word}\n")
+        
+# Run the game when this file is executed directly
 if __name__== "__main__":
     main()
