@@ -1,5 +1,5 @@
 import random
-word_file = "Task1/google-l0000-english-no-swears.txt"
+word_file = "google-l0000-english-no-swears.txt"
 # Display the Hangman drawing based on wrong guesses
 def hangman(value):
     hangman_art=[
